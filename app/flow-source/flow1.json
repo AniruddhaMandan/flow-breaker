@@ -1,0 +1,212 @@
+{
+    "startState": "customScan",
+    "states": [
+      {
+        "name": "customScan",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "saveDataCheck",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": []
+      },
+      {
+        "name": "saveDataCheck",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "daxDataFetch",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "customScan"
+        ]
+      },
+      {
+        "name": "daxDataFetch",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "finalA",
+            "actions": null,
+            "configuration": {
+              "grade": "",
+              "message": null,
+              "messageToggle": null,
+              "messageColor": "red"
+            }
+          }
+        ],
+        "parents": [
+          "saveDataCheck"
+        ]
+      },
+      {
+        "name": "finalA",
+        "transitions": [],
+        "parents": [
+          "daxDataFetch",
+          "26b0f929-9d2b-41c9-ab8e-f3e957220ce4"
+        ]
+      },
+      {
+        "name": "85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2",
+        "transitions": [
+          {
+            "on": "IW",
+            "target": "4ff20b60-7220-4dbe-b20c-2cfeb8292f50",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "EW",
+            "target": "ef6b5fca-02ed-46cd-a01f-a84398f964b7",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "HP",
+            "target": "a2609daa-b8d5-4f7b-8915-6b042681cd58",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "HI",
+            "target": "526af8a9-48f4-429d-926e-c63348196b29",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "daxDataFetch"
+        ]
+      },
+      {
+        "name": "4ff20b60-7220-4dbe-b20c-2cfeb8292f50",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2"
+        ]
+      },
+      {
+        "name": "ef6b5fca-02ed-46cd-a01f-a84398f964b7",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2"
+        ]
+      },
+      {
+        "name": "a2609daa-b8d5-4f7b-8915-6b042681cd58",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2"
+        ]
+      },
+      {
+        "name": "526af8a9-48f4-429d-926e-c63348196b29",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "707e6b0f-b891-4951-922e-77fa911879f7",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2"
+        ]
+      },
+      {
+        "name": "707e6b0f-b891-4951-922e-77fa911879f7",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "26b0f929-9d2b-41c9-ab8e-f3e957220ce4",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "4ff20b60-7220-4dbe-b20c-2cfeb8292f50",
+          "ef6b5fca-02ed-46cd-a01f-a84398f964b7",
+          "a2609daa-b8d5-4f7b-8915-6b042681cd58",
+          "526af8a9-48f4-429d-926e-c63348196b29"
+        ]
+      },
+      {
+        "name": "26b0f929-9d2b-41c9-ab8e-f3e957220ce4",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "finalA",
+            "actions": null,
+            "configuration": {
+              "grade": "",
+              "message": "",
+              "messageToggle": "",
+              "messageColor": "red"
+            }
+          }
+        ],
+        "parents": [
+          "707e6b0f-b891-4951-922e-77fa911879f7"
+        ]
+      }
+    ]
+  }
