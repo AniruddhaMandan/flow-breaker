@@ -1,0 +1,212 @@
+{
+    "startState": "A",
+    "states": [
+      {
+        "name": "A",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "B",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": []
+      },
+      {
+        "name": "B",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "C",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "A"
+        ]
+      },
+      {
+        "name": "C",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "D",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "final",
+            "actions": null,
+            "configuration": {
+              "grade": "",
+              "message": null,
+              "messageToggle": null,
+              "messageColor": "red"
+            }
+          }
+        ],
+        "parents": [
+          "B"
+        ]
+      },
+      {
+        "name": "final",
+        "transitions": [],
+        "parents": [
+          "C",
+          "J"
+        ]
+      },
+      {
+        "name": "D",
+        "transitions": [
+          {
+            "on": "IW",
+            "target": "E",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "EW",
+            "target": "F",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "HP",
+            "target": "G",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "HI",
+            "target": "H",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "C"
+        ]
+      },
+      {
+        "name": "E",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "D"
+        ]
+      },
+      {
+        "name": "F",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "D"
+        ]
+      },
+      {
+        "name": "G",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "D"
+        ]
+      },
+      {
+        "name": "H",
+        "transitions": [
+          {
+            "on": "PASS",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          },
+          {
+            "on": "FAIL",
+            "target": "I",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "D"
+        ]
+      },
+      {
+        "name": "I",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "J",
+            "actions": null,
+            "configuration": {}
+          }
+        ],
+        "parents": [
+          "E",
+          "F",
+          "G",
+          "H"
+        ]
+      },
+      {
+        "name": "J",
+        "transitions": [
+          {
+            "on": "NEXT",
+            "target": "final",
+            "actions": null,
+            "configuration": {
+              "grade": "",
+              "message": "",
+              "messageToggle": "",
+              "messageColor": "red"
+            }
+          }
+        ],
+        "parents": [
+          "I"
+        ]
+      }
+    ]
+  }

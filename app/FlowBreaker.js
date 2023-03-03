@@ -3,24 +3,24 @@ _ = require('lodash');
 
 //Read flow json & call main() function for further processing.
 function initFlowBreaker(startingVertex) {
-    fs.readFile('./app/flow-source/flow1.json', (err, data) => {
+    fs.readFile('./app/flow-source/flow2.json', (err, data) => {
         if (err) throw err;
         main(JSON.parse(data), startingVertex);
     });
 }
 
 function main(flow, startingVertex) {
-    flow.discardedTransactions = [];
+    flow.discardedStates = {verticesRemoved:[], stateTransactionRemoved:[]};
     if (flow && flow.states) {
         let verticesMap = {};
         flow.states.forEach(function (transaction, index) {
             initVerticesMap(verticesMap, transaction, index);
         });
-        discardParentVertices(flow, verticesMap, verticesMap[`${startingVertex}`], startingVertex);
+        discardParentVertices(flow, verticesMap, startingVertex);
         rearrangeVertexLinkage(flow, verticesMap);
         flow.startState = startingVertex;
         
-        console.log(JSON.stringify(flow));
+        console.dir(flow, {depth:null});
     }
 
 }
@@ -76,22 +76,32 @@ function initVerticesMap(verticesMap, transaction, index){
     - From new Start Point recursively go back to parent & mark isDescarded property against those vertices into the verticesMap as 1.
     - Simultaneously keep accumulating discarded vertices into a seperate list.
 */
-function discardParentVertices(flow, verticesMap, transaction, newStartingVertex){
-    if(transaction.parents && transaction.parents.length !== 0){
-        transaction.parents.forEach(parentVertex =>{
-            if(parentVertex == newStartingVertex){
-                const errorMsg = `${newStartingVertex} is found to be one of the discarded vertices & hence it cant be set as a new start point...!`;
-                throw new Error(errorMsg);
-            }
-            flow.discardedTransactions.push({
-                ...flow.states[`${verticesMap[`${parentVertex}`].index}`]
-            });
-            verticesMap[`${parentVertex}`].isDescarded = 1;
-            discardParentVertices(flow, verticesMap, verticesMap[`${parentVertex}`], newStartingVertex);
-        })
-    }
-        
+function discardParentVertices(flow, verticesMap, startingVertex){
+    verticesMap[`${startingVertex}`].parents.forEach(parentVertex =>{
+        markVertexDiscarded(flow, verticesMap, parentVertex, startingVertex);
+    });
 }
+
+function markVertexDiscarded(flow, verticesMap, currVertex, startingVertex){
+    let transaction = verticesMap[`${currVertex}`];
+    if(transaction){
+        if(!flow.discardedStates.verticesRemoved.includes(currVertex)){
+            flow.discardedStates.verticesRemoved.push(currVertex);
+            flow.discardedStates.stateTransactionRemoved.push({
+                ...flow.states[`${transaction.index}`]
+            });
+        }
+        transaction.isDescarded = 1;
+
+        transaction.parents.forEach(parentVertex =>{
+            if(parentVertex !== startingVertex){
+                markVertexDiscarded(flow, verticesMap, parentVertex, startingVertex);
+            }
+        });
+    }
+}
+
+
 
 /* Logic
 iterate over verticesMap sequentially
@@ -103,18 +113,16 @@ iterate over verticesMap sequentially
 */
 function rearrangeVertexLinkage(flow, verticesMap){
     Object.entries(verticesMap).forEach(entry => {
-        const [parentVertexName, parentTransaction] = entry;
-            if(parentTransaction.isDescarded){
-                const parentVertexFlow = flow.states[`${parentTransaction.index}`];
-                parentTransaction.transitions.forEach((childVertex =>{
-                    const childTransaction = verticesMap[`${childVertex}`];
+        const [currStateName, currStateTransaction] = entry;
+            if(currStateTransaction.isDescarded){
+                currStateTransaction.transitions.forEach((childStateName =>{
+                    const childTransaction = verticesMap[`${childStateName}`];
                     if(!childTransaction.isDescarded){
-                        //remove vertex from the transitions of "discarded vertex" i.e. parentTransaction
-                        parentVertexFlow.transitions = _.remove(parentVertexFlow.transitions, {target: childVertex});
+                        //remove vertex from the transitions of "discarded vertex" i.e. currStateTransaction
+                        _.remove(flow.states[`${currStateTransaction.index}`].transitions, {target: childStateName});
                         
                         //Also remove the discarded parent vertex from the parent property associated with the non discarded vertex.
-                        const childVertexFlow = flow.states[`${childTransaction.index}`];
-                        childVertexFlow.parents = _.without(childVertexFlow.parents, parentVertexName);
+                        flow.states[`${childTransaction.index}`].parents = _.without(flow.states[`${childTransaction.index}`].parents, currStateName);
                     }
                 }));
             }
@@ -125,4 +133,4 @@ function rearrangeVertexLinkage(flow, verticesMap){
     Here in this example, We want to re-arrange the flow considering the fact that '85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2' 
     will be the new start point.
 */
-initFlowBreaker('85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2');
+initFlowBreaker('I');
