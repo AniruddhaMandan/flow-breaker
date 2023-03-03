@@ -16,7 +16,7 @@ function main(flow, startingVertex) {
         flow.states.forEach(function (transaction, index) {
             initVerticesMap(verticesMap, transaction, index);
         });
-        discardParentVertices(flow, verticesMap, verticesMap[`${startingVertex}`]);
+        discardParentVertices(flow, verticesMap, verticesMap[`${startingVertex}`], startingVertex);
         rearrangeVertexLinkage(flow, verticesMap);
         flow.startState = startingVertex;
         
@@ -76,14 +76,18 @@ function initVerticesMap(verticesMap, transaction, index){
     - From new Start Point recursively go back to parent & mark isDescarded property against those vertices into the verticesMap as 1.
     - Simultaneously keep accumulating discarded vertices into a seperate list.
 */
-function discardParentVertices(flow, verticesMap, transaction){
+function discardParentVertices(flow, verticesMap, transaction, newStartingVertex){
     if(transaction.parents && transaction.parents.length !== 0){
         transaction.parents.forEach(parentVertex =>{
+            if(parentVertex == newStartingVertex){
+                const errorMsg = `${newStartingVertex} is found to be one of the discarded vertices & hence it cant be set as a new start point...!`;
+                throw new Error(errorMsg);
+            }
             flow.discardedTransactions.push({
                 ...flow.states[`${verticesMap[`${parentVertex}`].index}`]
             });
             verticesMap[`${parentVertex}`].isDescarded = 1;
-            discardParentVertices(flow, verticesMap, verticesMap[`${parentVertex}`]);
+            discardParentVertices(flow, verticesMap, verticesMap[`${parentVertex}`], newStartingVertex);
         })
     }
         
