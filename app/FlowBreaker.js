@@ -10,7 +10,7 @@ function initFlowBreaker(startingVertex) {
 }
 
 function main(flow, startingVertex) {
-    flow.discardedStates = { verticesRemoved: new Set(), stateTransactionRemoved: [] };
+    flow.discardedStates = [];
     if (flow && flow.states) {
         let verticesMap = {};
         flow.states.forEach(function (transaction, index) {
@@ -99,10 +99,7 @@ function rearrangeVertexLinkage(flow, verticesMap) {
     Object.entries(verticesMap).forEach(entry => {
         const [currStateName, currStateTransaction] = entry;
         if (currStateTransaction.isDescarded) {
-            if(!flow.discardedStates.verticesRemoved.has(currStateName)){
-                flow.discardedStates.verticesRemoved.add(currStateName);
-                flow.discardedStates.stateTransactionRemoved.push(flow.states[`${currStateTransaction.index}`]);
-            }
+            flow.discardedStates.push(flow.states[`${currStateTransaction.index}`]);
         }else{
             //Not discared
             currStateTransaction.parents.forEach((parentStateName => {
@@ -122,4 +119,4 @@ function rearrangeVertexLinkage(flow, verticesMap) {
     Here in this example, We want to re-arrange the flow considering the fact that '85cc7d97-3fc0-4946-b3eb-f2a207d3c8e2' 
     will be the new start point.
 */
-initFlowBreaker('D');
+initFlowBreaker('H');
